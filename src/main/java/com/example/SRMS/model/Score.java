@@ -3,21 +3,32 @@ package com.example.SRMS.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+import java.util.UUID;
+
 @Entity
-@Table(name = "Score")
+@Table(name = "Scores")
 
 @Data
 public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String ScoreId;
+    private UUID ScoreId;
+
+    @ManyToOne
+    @JoinColumn(name = "UserId", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "TestId", nullable = false)
+    private Test test;
+
+    @OneToMany(mappedBy = "score", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Submission> submissions;
 
     @Column(nullable = false)
-    private String UserId;
-    private String TestId;
-    private String CourseId;
-    private String SubmissionId;
     private Integer Score;
     private String Remarks;
-    private String Status;
+
+    private ResultStatus Status;
 }

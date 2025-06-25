@@ -3,18 +3,24 @@ package com.example.SRMS.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.HashMap;
+import java.util.List;
 
 @Entity
-@Table(name = "Question")
+@Table(name = "Questions")
 
 @Data
 public class Question {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String QuestionId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer QuestionId;
+
+    @ManyToOne
+    @JoinColumn(name = "TestId", nullable = false)
+    private Test test;
 
     @Column(nullable = false)
     private String questionText;
-    private HashMap<String, Boolean> options;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> Options;
 }
